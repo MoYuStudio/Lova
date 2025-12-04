@@ -9,8 +9,8 @@ Compared to the original lerobot, lerobot_alohamini significantly enhances debug
 For newly added debugging commands, please refer to:
 [Debug Command Summary](examples/debug/README.md)
 
-AlohaMini Hardware Preview
-![alohamini concept](examples/alohamini/media/alohamini1a.png)  
+AlohaMini Hardware 
+![alohamini concept](examples/alohamini/media/alohamini3a.png)  
 
 
 ## Getting Started (Ubuntu System)
@@ -37,7 +37,7 @@ After entering in terminal, you should be able to see the CUDA version number
 
 ```
 cd ~
-git clone https://github.com/liyitenga/lerobot_alohamini.git
+git clone https://github.com/liyiteng/lerobot_alohamini.git
 ```
 
 ### 3. Serial Port Authorization
