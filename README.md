@@ -152,7 +152,7 @@ python examples/alohamini/teleoperate_bi.py \
   --remote_ip 192.168.50.43
 
 // Teleoperation with voice functionality
-  python examples/alohamini/teleoperate_bi_voice.py \
+python examples/alohamini/teleoperate_bi_voice.py \
   --remote_ip 192.168.50.43
 
 Note: Voice functionality requires installing dependencies and setting DASHSCOPE_API_KEY
