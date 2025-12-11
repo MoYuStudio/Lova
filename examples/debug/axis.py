@@ -11,7 +11,7 @@ from lerobot.motors.feetech import FeetechMotorsBus, OperatingMode
 SERVO_ID = 11               # 舵机 ID
 MODEL = "sts3215"           # 舵机型号
 SPEED_DEGPS = 180.0         # 转速 deg/s
-CURRENT_CUTOFF = 300.0      # 过流阈值 mA
+CURRENT_CUTOFF = 500.0      # 过流阈值 mA
 SAMPLES_TO_TRIGGER = 2      # 连续多少次超过阈值才触发
 # ================================================= #
 
