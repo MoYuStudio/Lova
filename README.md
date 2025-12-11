@@ -135,7 +135,9 @@ Client-side calibration:
 Execute the following command, replace the IP with the actual IP of the host Raspberry Pi, then repeat the above steps
 ```
 python examples/alohamini/teleoperate_bi.py \
---remote_ip 192.168.50.43
+--remote_ip 192.168.50.43 \
+--leader_id so101_leader_bi
+
 ```
 
 #### 7.2 Teleoperation Command Summary
@@ -159,6 +161,7 @@ python examples/alohamini/teleoperate_bi.py \
 python examples/alohamini/teleoperate_bi_voice.py \
 --remote_ip 192.168.50.43 \
 --leader_id so101_leader_bi
+
 
 Note: Voice functionality requires installing dependencies and setting DASHSCOPE_API_KEY
 
