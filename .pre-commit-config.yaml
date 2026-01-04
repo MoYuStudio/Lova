@@ -18,13 +18,13 @@ default_language_version:
 exclude: "tests/artifacts/.*\\.safetensors$"
 
 repos:
-  ##### Meta #####
+  ##### 元数据 #####
   - repo: meta
     hooks:
       - id: check-useless-excludes
       - id: check-hooks-apply
 
-   ##### General Code Quality & Formatting #####
+   ##### 通用代码质量和格式化 #####
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
     hooks:
@@ -57,7 +57,7 @@ repos:
     -   id: pyupgrade
         args: [--py310-plus]
 
-  ##### Markdown Quality #####
+  ##### Markdown 质量 #####
   - repo: https://github.com/rbubley/mirrors-prettier
     rev: v3.6.2
     hooks:
@@ -66,7 +66,7 @@ repos:
         types_or: [markdown, mdx]
         args: [--prose-wrap=preserve]
 
-  ##### Security #####
+  ##### 安全性 #####
   - repo: https://github.com/gitleaks/gitleaks
     rev: v8.28.0
     hooks:
@@ -84,8 +84,8 @@ repos:
       args: ["-c", "pyproject.toml"]
       additional_dependencies: ["bandit[toml]"]
 
-  # TODO(Steven): Uncomment when ready to use
-  ##### Static Analysis & Typing #####
+  # TODO(Steven): 准备就绪时取消注释
+  ##### 静态分析和类型检查 #####
   - repo: https://github.com/pre-commit/mirrors-mypy
     rev: v1.18.2
     hooks:
@@ -93,7 +93,7 @@ repos:
         args: [--config-file=pyproject.toml]
         exclude: ^(examples|benchmarks|tests)/
 
-  ##### Docstring Checks #####
+  ##### 文档字符串检查 #####
   # - repo: https://github.com/akaihola/darglint2
   #   rev: v1.8.2
   #   hooks:

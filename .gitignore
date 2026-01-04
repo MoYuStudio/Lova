@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-### Environments & Dependencies ###
+### 环境和依赖 ###
 .env
 .venv
 env/
@@ -23,12 +23,12 @@ venv.bak/
 __pypackages__/
 node_modules/
 
-# Lock files
+# 锁定文件
 poetry.lock
 uv.lock
 Pipfile.lock
 
-### Build & Distribution ###
+### 构建和分发 ###
 build/
 dist/
 sdist/
@@ -52,7 +52,7 @@ lib64/
 *.manifest
 *.spec
 
-### Compiled & Cached Files ###
+### 编译和缓存文件 ###
 __pycache__/
 *.py[cod]
 *$py.class
@@ -65,7 +65,7 @@ __pycache__/
 .pytype/
 cython_debug/
 
-### Testing & Coverage ###
+### 测试和覆盖率 ###
 htmlcov/
 .tox/
 .nox/
@@ -79,7 +79,7 @@ coverage.xml
 *.py,cover
 !tests/artifacts
 
-### Logs & Temporary Files ###
+### 日志和临时文件 ###
 logs/
 tmp/
 *.log
@@ -88,7 +88,7 @@ pip-delete-this-directory.txt
 celerybeat-schedule
 celerybeat.pid
 
-### IDE & Editor Config ###
+### IDE 和编辑器配置 ###
 # VS Code
 .vscode/
 .devcontainer/
@@ -106,17 +106,17 @@ celerybeat.pid
 # Vim
 *.swp
 
-# Other
+# 其他
 *~
 
-### OS Specific ###
+### 操作系统特定 ###
 # macOS
 .DS_Store
 
 # Windows
 Thumbs.db
 
-### Framework & Tool Specific ###
+### 框架和工具特定 ###
 
 .Python
 
@@ -151,27 +151,27 @@ target/
 .dmypy.json
 dmypy.json
 
-### HPC & Slurm ###
+### HPC 和 Slurm ###
 nautilus/*.yaml
 *.key
 sbatch*.sh
 
-### Miscellaneous ###
+### 其他 ###
 # W&B
 wandb/
 
-# Dev scripts
+# 开发脚本
 .dev/
 
-# Data folders
+# 数据文件夹
 data/
 outputs/
 
-# Translations
+# 翻译
 *.mo
 *.pot
 
-# Dev folders
+# 开发文件夹
 .cache/*
 *.stl
 *.urdf

@@ -16,7 +16,7 @@
 
 PYTHON_PATH := $(shell which python)
 
-# If uv is installed and a virtual environment exists, use it
+# 如果安装了 uv 且存在虚拟环境，则使用它
 UV_CHECK := $(shell command -v uv)
 ifneq ($(UV_CHECK),)
 	PYTHON_PATH := $(shell .venv/bin/python)

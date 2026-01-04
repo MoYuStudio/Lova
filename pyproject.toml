@@ -58,13 +58,13 @@ keywords = ["lerobot", "huggingface", "robotics",  "machine learning", "artifici
 
 dependencies = [
 
-    # Hugging Face dependencies
+    # Hugging Face 依赖项
     "datasets>=4.0.0,<4.2.0",
     "diffusers>=0.27.2,<0.36.0",
     "huggingface-hub[hf-transfer,cli]>=0.34.2,<0.36.0",
     "accelerate>=1.10.0,<2.0.0",
 
-    # Core dependencies
+    # 核心依赖项
     "setuptools>=71.0.0,<81.0.0",
     "cmake>=3.29.0.1,<4.2.0",
     "einops>=0.8.0,<0.9.0",
@@ -74,36 +74,36 @@ dependencies = [
     "packaging>=24.2,<26.0",
     "pynput>=1.7.7,<1.9.0",
     "pyserial>=3.5,<4.0",
-    "wandb>=0.20.0,<0.22.0", # TODO: Bumb dependency (compatible with protobuf)
+    "wandb>=0.20.0,<0.22.0", # TODO: 升级依赖项（与 protobuf 兼容）
 
-    "torch>=2.2.1,<2.8.0", # TODO: Bumb dependency
-    "torchcodec>=0.2.1,<0.6.0; sys_platform != 'win32' and (sys_platform != 'linux' or (platform_machine != 'aarch64' and platform_machine != 'arm64' and platform_machine != 'armv7l')) and (sys_platform != 'darwin' or platform_machine != 'x86_64')", # TODO: Bumb dependency
-    "torchvision>=0.21.0,<0.23.0", # TODO: Bumb dependency
+    "torch>=2.2.1,<2.8.0", # TODO: 升级依赖项
+    "torchcodec>=0.2.1,<0.6.0; sys_platform != 'win32' and (sys_platform != 'linux' or (platform_machine != 'aarch64' and platform_machine != 'arm64' and platform_machine != 'armv7l')) and (sys_platform != 'darwin' or platform_machine != 'x86_64')", # TODO: 升级依赖项
+    "torchvision>=0.21.0,<0.23.0", # TODO: 升级依赖项
 
-    "draccus==0.10.0", # TODO: Remove ==
+    "draccus==0.10.0", # TODO: 移除 ==
     "gymnasium>=1.1.1,<2.0.0",
     "rerun-sdk>=0.24.0,<0.27.0",
 
-    # Support dependencies
+    # 支持依赖项
     "deepdiff>=7.0.1,<9.0.0",
     "imageio[ffmpeg]>=2.34.0,<3.0.0",
     "termcolor>=2.4.0,<4.0.0",
 ]
 
-# Optional dependencies
+# 可选依赖项
 [project.optional-dependencies]
 
-# Common
+# 通用
 pygame-dep = ["pygame>=2.5.1,<2.7.0"]
 placo-dep = ["placo>=0.9.6,<0.10.0"]
 transformers-dep = ["transformers>=4.53.0,<5.0.0"]
-grpcio-dep = ["grpcio==1.73.1", "protobuf==6.31.0"] # TODO: Bumb dependency (compatible with wandb)
+grpcio-dep = ["grpcio==1.73.1", "protobuf==6.31.0"] # TODO: 升级依赖项（与 wandb 兼容）
 
-# Motors
+# 电机
 feetech = ["feetech-servo-sdk>=1.0.0,<2.0.0"]
 dynamixel = ["dynamixel-sdk>=3.7.31,<3.9.0"]
 
-# Robots
+# 机器人
 gamepad = ["lerobot[pygame-dep]", "hidapi>=0.14.0,<0.15.0"]
 hopejr = ["lerobot[feetech]", "lerobot[pygame-dep]"]
 lekiwi = ["lerobot[feetech]", "pyzmq>=26.2.1,<28.0.0"]
@@ -119,7 +119,7 @@ intelrealsense = [
 ]
 phone = ["hebi-py>=2.8.0,<2.12.0", "teleop>=0.1.0,<0.2.0", "fastapi<1.0"]
 
-# Policies
+# 策略
 pi = ["transformers @ git+https://github.com/huggingface/transformers.git@fix/lerobot_openpi"]
 smolvla = ["lerobot[transformers-dep]", "num2words>=0.5.14,<0.6.0", "accelerate>=1.7.0,<2.0.0", "safetensors>=0.4.3,<1.0.0"]
 groot = [
@@ -136,21 +136,21 @@ groot = [
 xvla = ["lerobot[transformers-dep]"]
 hilserl = ["lerobot[transformers-dep]", "gym-hil>=0.1.13,<0.2.0", "lerobot[grpcio-dep]", "lerobot[placo-dep]"]
 
-# Features
+# 功能
 async = ["lerobot[grpcio-dep]", "matplotlib>=3.10.3,<4.0.0"]
 
-# Development
+# 开发
 dev = ["pre-commit>=3.7.0,<5.0.0", "debugpy>=1.8.1,<1.9.0", "lerobot[grpcio-dep]", "grpcio-tools==1.73.1"]
 test = ["pytest>=8.1.0,<9.0.0", "pytest-timeout>=2.4.0,<3.0.0", "pytest-cov>=5.0.0,<8.0.0", "mock-serial>=0.0.1,<0.1.0 ; sys_platform != 'win32'"]
 video_benchmark = ["scikit-image>=0.23.2,<0.26.0", "pandas>=2.2.2,<2.4.0"]
 
-# Simulation
+# 模拟
 aloha = ["gym-aloha>=0.1.2,<0.2.0"]
-pusht = ["gym-pusht>=0.1.5,<0.2.0", "pymunk>=6.6.0,<7.0.0"] # TODO: Fix pymunk version in gym-pusht instead
+pusht = ["gym-pusht>=0.1.5,<0.2.0", "pymunk>=6.6.0,<7.0.0"] # TODO: 在 gym-pusht 中修复 pymunk 版本
 libero = ["lerobot[transformers-dep]", "hf-libero>=0.1.3,<0.2.0"]
 metaworld = ["metaworld==3.0.0"]
 
-# All
+# 全部
 all = [
     "lerobot[dynamixel]",
     "lerobot[gamepad]",
@@ -161,7 +161,7 @@ all = [
     "lerobot[intelrealsense]",
     "lerobot[pi]",
     "lerobot[smolvla]",
-    # "lerobot[groot]", TODO(Steven): Gr00t requires specific installation instructions for flash-attn
+    # "lerobot[groot]", TODO(Steven): Gr00t 需要特定的 flash-attn 安装说明
     "lerobot[xvla]",
     "lerobot[hilserl]",
     "lerobot[async]",
@@ -191,7 +191,7 @@ lerobot-find-joint-limits="lerobot.scripts.lerobot_find_joint_limits:main"
 lerobot-imgtransform-viz="lerobot.scripts.lerobot_imgtransform_viz:main"
 lerobot-edit-dataset="lerobot.scripts.lerobot_edit_dataset:main"
 
-# ---------------- Tool Configurations ----------------
+# ---------------- 工具配置 ----------------
 [tool.setuptools.packages.find]
 where = ["src"]
 
@@ -201,28 +201,28 @@ line-length = 110
 exclude = ["tests/artifacts/**/*.safetensors", "*_pb2.py", "*_pb2_grpc.py"]
 
 [tool.ruff.lint]
-# E, W: pycodestyle errors and warnings
+# E, W: pycodestyle 错误和警告
 # F: PyFlakes
 # I: isort
 # UP: pyupgrade
-# B: flake8-bugbear (good practices, potential bugs)
-# C4: flake8-comprehensions (more concise comprehensions)
-# A: flake8-builtins (shadowing builtins)
+# B: flake8-bugbear（良好实践，潜在错误）
+# C4: flake8-comprehensions（更简洁的推导式）
+# A: flake8-builtins（遮蔽内置函数）
 # SIM: flake8-simplify
-# RUF: Ruff-specific rules
-# D: pydocstyle (for docstring style/formatting)
-# S: flake8-bandit (some security checks, complements Bandit)
-# T20: flake8-print (discourage print statements in production code)
+# RUF: Ruff 特定规则
+# D: pydocstyle（用于文档字符串样式/格式化）
+# S: flake8-bandit（一些安全检查，补充 Bandit）
+# T20: flake8-print（不鼓励在生产代码中使用 print 语句）
 # N: pep8-naming
-# TODO: Uncomment rules when ready to use
+# TODO: 准备就绪时取消注释规则
 select = [
     "E", "W", "F", "I", "B", "C4", "T20", "N", "UP", "SIM" #, "A", "S", "D", "RUF"
 ]
 ignore = [
-    "E501", # Line too long
-    "T201", # Print statement found
-    "T203", # Pprint statement found
-    "B008", # Perform function call in argument defaults
+    "E501", # 行太长
+    "T201", # 找到 print 语句
+    "T203", # 找到 pprint 语句
+    "B008", # 在参数默认值中执行函数调用
 ]
 
 [tool.ruff.lint.per-file-ignores]
@@ -256,7 +256,7 @@ default.extend-ignore-re = [
     "(?s)(#|//)\\s*spellchecker:off.*?\\n\\s*(#|//)\\s*spellchecker:on", # spellchecker:<on|off>
 ]
 default.extend-ignore-identifiers-re = [
-    # Add individual words here to ignore them
+    # 在此处添加要忽略的单个单词
     "2nd",
     "pn",
     "ser",
@@ -265,7 +265,7 @@ default.extend-ignore-identifiers-re = [
     "inpt",
 ]
 
-# TODO: Uncomment when ready to use
+# TODO: 准备就绪时取消注释
 # [tool.interrogate]
 # ignore-init-module = true
 # ignore-init-method = true
@@ -281,8 +281,8 @@ default.extend-ignore-identifiers-re = [
 # color = true
 # paths = ["src/lerobot"]
 
-# TODO: Enable mypy gradually module by module across multiple PRs
-# Uncomment [tool.mypy] first, then uncomment individual module overrides as they get proper type annotations
+# TODO: 在多个 PR 中逐步按模块启用 mypy
+# 首先取消注释 [tool.mypy]，然后在各个模块获得适当的类型注释时取消注释各个模块覆盖
 
 [tool.mypy]
 python_version = "3.10"
