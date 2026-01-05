@@ -188,7 +188,7 @@ class LeKiwi(Robot):
         logger.info(f"{self} connected.")
 
         self.lift.home()
-        print("Lift axis homed to 0mm.")
+        print("升降轴已归零至 0mm。")
 
         
 
@@ -243,7 +243,7 @@ class LeKiwi(Robot):
         full_turn_left = [m for m in motors_left_all if m.startswith("base_")]  # 三个轮子
         unknown_left = [m for m in motors_left_all if m not in full_turn_left]
 
-        print("Move LEFT arm joints sequentially through full ROM. Press ENTER to stop...")
+        print("按顺序移动左臂关节至完整运动范围。按 ENTER 键停止...")
         l_mins, l_maxs = self.left_bus.record_ranges_of_motion(unknown_left)
         for m in full_turn_left:
             l_mins[m] = 0
@@ -260,7 +260,7 @@ class LeKiwi(Robot):
             input("Move RIGHT arm to the middle of its range of motion, then press ENTER...")
             right_homing = self.right_bus.set_half_turn_homings(self.right_arm_motors)
 
-            print("Move RIGHT arm joints sequentially through full ROM. Press ENTER to stop...")
+            print("按顺序移动右臂关节至完整运动范围。按 ENTER 键停止...")
             r_mins, r_maxs = self.right_bus.record_ranges_of_motion(self.right_arm_motors)
 
         # 合并 → 按总线过滤并写回 → 保存为单个文件
@@ -296,7 +296,7 @@ class LeKiwi(Robot):
             self.right_bus.calibration = calib_right
 
         self._save_calibration()
-        print("Calibration saved to", self.calibration_fpath)
+        print("校准已保存至", self.calibration_fpath)
 
 
 
@@ -339,7 +339,7 @@ class LeKiwi(Robot):
         for motor in chain(reversed(self.arm_motors), reversed(self.base_motors)):
             input(f"Connect the controller board to the '{motor}' motor only and press enter.")
             self.left_bus.setup_motor(motor)
-            print(f"'{motor}' motor id set to {self.left_bus.motors[motor].id}")
+            print(f"'{motor}' 电机 ID 已设置为 {self.left_bus.motors[motor].id}")
 
     @staticmethod
     def _degps_to_raw(degps: float) -> int:
@@ -618,7 +618,7 @@ class LeKiwi(Robot):
 
             if current_ma > limit_ma:
                 self._overcurrent_count[name] = self._overcurrent_count.get(name, 0) + 1
-                print(f"[Overcurrent] {name}: {current_ma:.1f} mA > {limit_ma:.1f} mA ")
+                print(f"[过流] {name}: {current_ma:.1f} mA > {limit_ma:.1f} mA ")
             else:
                 # 当恢复正常时重置 -> "连续"语义
                 self._overcurrent_count[name] = 0
@@ -630,8 +630,8 @@ class LeKiwi(Robot):
         if tripped is not None:
             name, current_ma, n = tripped
             print(
-                f"[Overcurrent] {name}: {current_ma:.1f} mA > {limit_ma:.1f} mA "
-                f"for {n} consecutive reads, disconnecting!"
+                f"[过流] {name}: {current_ma:.1f} mA > {limit_ma:.1f} mA "
+                f"连续 {n} 次读取超过限制，正在断开连接！"
             )
             try:
                 self.stop_base()
@@ -640,7 +640,7 @@ class LeKiwi(Robot):
             try:
                 self.disconnect()
             except Exception as e:
-                print(f"[Overcurrent] disconnect error: {e}")
+                print(f"[过流] 断开连接错误: {e}")
             sys.exit(1)
 
 

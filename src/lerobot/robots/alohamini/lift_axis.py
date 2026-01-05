@@ -123,26 +123,26 @@ class LiftAxis:
                 try: 
                     raw_cur_ma = int(self._bus.read("Present_Current", name, normalize=False))
                     cur_ma = raw_cur_ma * 6.5
-                    print(f"[lift_axis.home] Present_Current={cur_ma} mA")  # debug
-                    print(f"[lift_axis.home] Present_Position={now_tick} ticks")  # debug
+                    print(f"[lift_axis.home] 当前电流={cur_ma} mA")  # debug
+                    print(f"[lift_axis.home] 当前位置={now_tick} 刻度")  # debug
 
                 except Exception: cur_ma = 0
             if (use_current and cur_ma >= self.cfg.home_stall_current_ma) or (not moved):
-                print(f"[lift_axis.home] Stalled at current={cur_ma} mA, moved={moved}")  # debug
+                print(f"[lift_axis.home] 在电流={cur_ma} mA 时堵转，移动={moved}")  # debug
                 stuck += 1
             else:
                 stuck = 0
             if stuck >= 2: break
         #self._bus.write("Goal_Velocity", name, 0)
         self._bus.write("Torque_Enable", name, 0)
-        print("Disable torque output (motor will be released)")
+        print("禁用扭矩输出（电机将被释放）")
         time.sleep(1)
 
         self._update_extended_ticks()
         self._z0_deg = self._extended_deg()       
-        print("Extended ticks after homing:", self._extended_ticks)
+        print("归零后的扩展刻度:", self._extended_ticks)
         h_now = self.get_height_mm()
-        print(f"[home] set-zero z0_deg={self._z0_deg:.2f}, height_now={h_now:.2f} mm")  # 这里应≈0
+        print(f"[home] 设置零点 z0_deg={self._z0_deg:.2f}, 当前高度={h_now:.2f} mm")  # 这里应≈0
 
 
 
@@ -173,7 +173,7 @@ class LiftAxis:
         # 仅用于调试读取电流
         raw_cur_ma = int(self._bus.read("Present_Current", self.cfg.name, normalize=False))
         cur_ma = raw_cur_ma * 6.5
-        print(f"[lift_axis.update] target={self._target_mm:.2f} mm, cur={cur_mm:.2f} mm, err={err:.2f} mm, v={v:.1f}| current={cur_ma} mA")
+        print(f"[lift_axis.update] 目标={self._target_mm:.2f} mm, 当前={cur_mm:.2f} mm, 误差={err:.2f} mm, 速度={v:.1f}| 电流={cur_ma} mA")
 
     # 与动作/观察的轻量级耦合
     def contribute_observation(self, obs: Dict[str, float]) -> None:

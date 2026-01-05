@@ -120,12 +120,12 @@ def main():
 
             time.sleep(max(1 / host.max_loop_freq_hz - elapsed, 0))
             duration = time.perf_counter() - start
-        print("Cycle time reached.")
+        print("循环时间已到达。")
 
     except KeyboardInterrupt:
-        print("Keyboard interrupt received. Exiting...")
+        print("收到键盘中断。正在退出...")
     finally:
-        print("Shutting down AlohaMini Host.")
+        print("正在关闭 AlohaMini 主机。")
         robot.disconnect()
         host.disconnect()
 
