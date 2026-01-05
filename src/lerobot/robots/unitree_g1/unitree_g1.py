@@ -42,7 +42,7 @@ from .config_unitree_g1 import UnitreeG1Config
 
 logger = logging.getLogger(__name__)
 
-# DDS topic names follow Unitree SDK naming conventions
+# DDS 主题名称遵循 Unitree SDK 命名约定
 # ruff: noqa: N816
 kTopicLowCommand_Debug = "rt/lowcmd"
 kTopicLowState = "rt/lowstate"
@@ -55,30 +55,30 @@ H1_Num_Motors = 20
 
 @dataclass
 class MotorState:
-    q: float | None = None  # position
-    dq: float | None = None  # velocity
-    tau_est: float | None = None  # estimated torque
-    temperature: float | None = None  # motor temperature
+    q: float | None = None  # 位置
+    dq: float | None = None  # 速度
+    tau_est: float | None = None  # 估计扭矩
+    temperature: float | None = None  # 电机温度
 
 
 @dataclass
 class IMUState:
     quaternion: np.ndarray | None = None  # [w, x, y, z]
-    gyroscope: np.ndarray | None = None  # [x, y, z] angular velocity (rad/s)
-    accelerometer: np.ndarray | None = None  # [x, y, z] linear acceleration (m/s²)
+    gyroscope: np.ndarray | None = None  # [x, y, z] 角速度 (rad/s)
+    accelerometer: np.ndarray | None = None  # [x, y, z] 线性加速度 (m/s²)
     rpy: np.ndarray | None = None  # [roll, pitch, yaw] (rad)
-    temperature: float | None = None  # IMU temperature
+    temperature: float | None = None  # IMU 温度
 
 
-# g1 observation class
+# G1 观察类
 @dataclass
 class G1_29_LowState:  # noqa: N801
     motor_state: list[MotorState] = field(
         default_factory=lambda: [MotorState() for _ in range(G1_29_Num_Motors)]
     )
     imu_state: IMUState = field(default_factory=IMUState)
-    wireless_remote: Any = None  # Raw wireless remote data
-    mode_machine: int = 0  # Robot mode
+    wireless_remote: Any = None  # 原始无线遥控数据
+    mode_machine: int = 0  # 机器人模式
 
 
 class DataBuffer:
@@ -99,7 +99,7 @@ class UnitreeG1(Robot):
     config_class = UnitreeG1Config
     name = "unitree_g1"
 
-    # unitree remote controller
+    # Unitree 遥控器
     class RemoteController:
         def __init__(self):
             self.lx = 0
@@ -109,7 +109,7 @@ class UnitreeG1(Robot):
             self.button = [0] * 16
 
         def set(self, data):
-            # wireless_remote
+            # 无线遥控
             keys = struct.unpack("H", data[2:4])[0]
             for i in range(16):
                 self.button[i] = (keys & (1 << i)) >> i
@@ -127,17 +127,17 @@ class UnitreeG1(Robot):
 
         self.control_dt = config.control_dt
 
-        # connect robot
+        # 连接机器人
         self.connect()
 
-        # initialize direct motor control interface
+        # 初始化直接电机控制接口
         self.lowcmd_publisher = ChannelPublisher(kTopicLowCommand_Debug, hg_LowCmd)
         self.lowcmd_publisher.Init()
         self.lowstate_subscriber = ChannelSubscriber(kTopicLowState, hg_LowState)
         self.lowstate_subscriber.Init()
         self.lowstate_buffer = DataBuffer()
 
-        # initialize subscribe thread to read robot state
+        # 初始化订阅线程以读取机器人状态
         self.subscribe_thread = threading.Thread(target=self._subscribe_motor_state)
         self.subscribe_thread.daemon = True
         self.subscribe_thread.start()
@@ -145,12 +145,12 @@ class UnitreeG1(Robot):
         while not self.is_connected:
             time.sleep(0.1)
 
-        # initialize hg's lowcmd msg
+        # 初始化 hg 的 lowcmd 消息
         self.crc = CRC()
         self.msg = unitree_hg_msg_dds__LowCmd_()
         self.msg.mode_pr = 0
 
-        # Wait for first state message to arrive
+        # 等待第一个状态消息到达
         lowstate = None
         while lowstate is None:
             lowstate = self.lowstate_buffer.get_data()
@@ -160,7 +160,7 @@ class UnitreeG1(Robot):
         logger.warning("[UnitreeG1] Connected to robot.")
         self.msg.mode_machine = lowstate.mode_machine
 
-        # initialize all motors with unified kp/kd from config
+        # 使用配置中的统一 kp/kd 初始化所有电机
         self.kp = np.array(config.kp, dtype=np.float32)
         self.kd = np.array(config.kd, dtype=np.float32)
 
@@ -170,54 +170,54 @@ class UnitreeG1(Robot):
             self.msg.motor_cmd[id].kd = self.kd[id.value]
             self.msg.motor_cmd[id].q = lowstate.motor_state[id.value].q
 
-        # Initialize remote controller
+        # 初始化遥控器
         self.remote_controller = self.RemoteController()
 
-    def _subscribe_motor_state(self):  # polls robot state @ 250Hz
+    def _subscribe_motor_state(self):  # 以 250Hz 轮询机器人状态
         while True:
             start_time = time.time()
             msg = self.lowstate_subscriber.Read()
             if msg is not None:
                 lowstate = G1_29_LowState()
 
-                # Capture motor states
+                # 捕获电机状态
                 for id in range(G1_29_Num_Motors):
                     lowstate.motor_state[id].q = msg.motor_state[id].q
                     lowstate.motor_state[id].dq = msg.motor_state[id].dq
                     lowstate.motor_state[id].tau_est = msg.motor_state[id].tau_est
                     lowstate.motor_state[id].temperature = msg.motor_state[id].temperature
 
-                # Capture IMU state
+                # 捕获 IMU 状态
                 lowstate.imu_state.quaternion = list(msg.imu_state.quaternion)
                 lowstate.imu_state.gyroscope = list(msg.imu_state.gyroscope)
                 lowstate.imu_state.accelerometer = list(msg.imu_state.accelerometer)
                 lowstate.imu_state.rpy = list(msg.imu_state.rpy)
                 lowstate.imu_state.temperature = msg.imu_state.temperature
 
-                # Capture wireless remote data
+                # 捕获无线遥控数据
                 lowstate.wireless_remote = msg.wireless_remote
 
-                # Capture mode_machine
+                # 捕获 mode_machine
                 lowstate.mode_machine = msg.mode_machine
 
                 self.lowstate_buffer.set_data(lowstate)
 
             current_time = time.time()
             all_t_elapsed = current_time - start_time
-            sleep_time = max(0, (self.control_dt - all_t_elapsed))  # maintain constant control dt
+            sleep_time = max(0, (self.control_dt - all_t_elapsed))  # 维持恒定的控制 dt
             time.sleep(sleep_time)
 
     @cached_property
     def action_features(self) -> dict[str, type]:
         return {f"{G1_29_JointIndex(motor).name}.pos": float for motor in G1_29_JointIndex}
 
-    def calibrate(self) -> None:  # robot is already calibrated
+    def calibrate(self) -> None:  # 机器人已经校准
         pass
 
     def configure(self) -> None:
         pass
 
-    def connect(self, calibrate: bool = True) -> None:  # connect to DDS
+    def connect(self, calibrate: bool = True) -> None:  # 连接到 DDS
         ChannelFactoryInitialize(0)
 
     def disconnect(self):
@@ -253,8 +253,8 @@ class UnitreeG1(Robot):
         self.lowcmd_publisher.Write(action)
         return action
 
-    def get_gravity_orientation(self, quaternion):  # get gravity orientation from quaternion
-        """Get gravity orientation from quaternion."""
+    def get_gravity_orientation(self, quaternion):  # 从四元数获取重力方向
+        """从四元数获取重力方向。"""
         qw = quaternion[0]
         qx = quaternion[1]
         qy = quaternion[2]

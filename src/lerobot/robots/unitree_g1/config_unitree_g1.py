@@ -34,7 +34,7 @@ _GAINS: dict[str, dict[str, list[float]]] = {
 
 
 def _build_gains() -> tuple[list[float], list[float]]:
-    """Build kp and kd lists from body-part groupings."""
+    """从身体部位分组构建 kp 和 kd 列表。"""
     kp = [v for g in _GAINS.values() for v in g["kp"]]
     kd = [v for g in _GAINS.values() for v in g["kd"]]
     return kp, kd
@@ -51,5 +51,5 @@ class UnitreeG1Config(RobotConfig):
 
     control_dt: float = 1.0 / 250.0  # 250Hz
 
-    # socket config for ZMQ bridge
+    # ZMQ 桥接的套接字配置
     robot_ip: str = "192.168.123.164"

@@ -43,18 +43,17 @@ def lekiwi_cameras_config() -> dict[str, CameraConfig]:
 @RobotConfig.register_subclass("lekiwi")
 @dataclass
 class LeKiwiConfig(RobotConfig):
-    left_port: str = "/dev/am_arm_follower_left"  # port to connect to the bus
-    right_port: str = "/dev/am_arm_follower_right"  # port to connect to the bus
+    left_port: str = "/dev/am_arm_follower_left"  # 连接到总线的端口
+    right_port: str = "/dev/am_arm_follower_right"  # 连接到总线的端口
     disable_torque_on_disconnect: bool = True
 
-    # `max_relative_target` limits the magnitude of the relative positional target vector for safety purposes.
-    # Set this to a positive scalar to have the same value for all motors, or a list that is the same length as
-    # the number of motors in your follower arms.
+    # `max_relative_target` 为了安全目的限制相对位置目标向量的大小。
+    # 设置为正标量以为所有电机使用相同的值，或设置为与从控臂电机数量相同长度的列表。
     max_relative_target: int | None = None
 
     cameras: dict[str, CameraConfig] = field(default_factory=lekiwi_cameras_config)
 
-    # Set to `True` for backward compatibility with previous policies/dataset
+    # 设置为 `True` 以与之前的策略/数据集向后兼容
     use_degrees: bool = False
 
 
@@ -62,17 +61,17 @@ class LeKiwiConfig(RobotConfig):
 
 @dataclass
 class LeKiwiHostConfig:
-    # Network Configuration
+    # 网络配置
     port_zmq_cmd: int = 5555
     port_zmq_observations: int = 5556
 
-    # Duration of the application
+    # 应用程序持续时间
     connection_time_s: int = 6000
 
-    # Watchdog: stop the robot if no command is received for over 1.5 seconds.
+    # 看门狗：如果超过 1.5 秒未收到命令，则停止机器人。
     watchdog_timeout_ms: int = 1500
 
-    # If robot jitters decrease the frequency and monitor cpu load with `top` in cmd
+    # 如果机器人抖动，降低频率并使用 `top` 命令监控 CPU 负载
     max_loop_freq_hz: int = 30
 
 
@@ -81,27 +80,27 @@ class LeKiwiHostConfig:
 @RobotConfig.register_subclass("lekiwi_client")
 @dataclass
 class LeKiwiClientConfig(RobotConfig):
-    # Network Configuration
+    # 网络配置
     remote_ip: str
     port_zmq_cmd: int = 5555
     port_zmq_observations: int = 5556
 
     teleop_keys: dict[str, str] = field(
         default_factory=lambda: {
-            # Movement
+            # 移动
             "forward": "w",
             "backward": "s",
             "left": "z",
             "right": "x",
             "rotate_left": "a",
             "rotate_right": "d",
-            # Speed control
+            # 速度控制
             "speed_up": "r",
             "speed_down": "f",
             # Z 轴
             "lift_up": "u",
             "lift_down": "j",
-            # quit teleop
+            # 退出遥操作
             "quit": "q",
         }
     )

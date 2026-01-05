@@ -67,7 +67,7 @@ def main():
     logging.info("Waiting for commands...")
 
     try:
-        # Business logic
+        # 业务逻辑
         start = time.perf_counter()
         duration = 0
 
@@ -99,7 +99,7 @@ def main():
             robot.lift.update()
             last_observation = robot.get_observation()
 
-            # Encode ndarrays to base64 strings
+            # 将 ndarray 编码为 base64 字符串
             for cam_key, _ in robot.cameras.items():
                 ret, buffer = cv2.imencode(
                     ".jpg", last_observation[cam_key], [int(cv2.IMWRITE_JPEG_QUALITY), 90]
@@ -109,13 +109,13 @@ def main():
                 else:
                     last_observation[cam_key] = ""
 
-            # Send the observation to the remote agent
+            # 将观察发送到远程代理
             try:
                 host.zmq_observation_socket.send_string(json.dumps(last_observation), flags=zmq.NOBLOCK)
             except zmq.Again:
                 logging.info("Dropping observation, no client connected")
 
-            # Ensure a short sleep to avoid overloading the CPU.
+            # 确保短暂休眠以避免 CPU 过载。
             elapsed = time.time() - loop_start_time
 
             time.sleep(max(1 / host.max_loop_freq_hz - elapsed, 0))

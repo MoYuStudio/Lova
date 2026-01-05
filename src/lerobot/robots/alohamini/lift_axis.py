@@ -17,33 +17,33 @@ from lerobot.motors.feetech import OperatingMode
 class LiftAxisConfig:
     enabled: bool = True
     name: str = "lift_axis"
-    bus: str = "left"                 # "left" or "right" (select which existing bus to use)
+    bus: str = "left"                 # "left" 或 "right"（选择使用哪个现有总线）
     motor_id: int = 11
     motor_model: str = "sts3215"
 
-    # Mechanical conversion (1 rev = 360° = 4096 ticks); adjust for your leadscrew/gear ratio
-    lead_mm_per_rev: float = 84      # Lead screw pitch (mm per revolution)
-    output_gear_ratio: float = 1.0    # Servo angle → lead screw angle transmission ratio
+    # 机械转换 (1 转 = 360° = 4096 刻度)；根据您的丝杠/齿轮比调整
+    lead_mm_per_rev: float = 84      # 丝杠螺距（每转毫米数）
+    output_gear_ratio: float = 1.0    # 伺服角度 → 丝杠角度传动比
     soft_min_mm: float = 0.0
-    soft_max_mm: float = 600        # Lift travel range
+    soft_max_mm: float = 600        # 升降行程范围
 
-    # Homing (drive downward to hard stop → rebound slightly)
-    home_down_speed: int = 1300      # Downward target velocity in velocity mode
-    home_stall_current_ma: int = 150  # Stall current threshold; used when no current feedback
+    # 归零（向下驱动到硬限位 → 稍微回退）
+    home_down_speed: int = 1300      # 速度模式下向下目标速度
+    home_stall_current_ma: int = 150  # 堵转电流阈值；在没有电流反馈时使用
     home_backoff_deg: float = 5.0
 
-    # Velocity closed-loop gains
-    kp_vel: float = 300              # (target speed units / mm)
-    v_max: int = 1300                # Velocity limit (depends on motor)
-    on_target_mm: int = 1.0          # Position tolerance (mm)
+    # 速度闭环增益
+    kp_vel: float = 300              # (目标速度单位 / mm)
+    v_max: int = 1300                # 速度限制（取决于电机）
+    on_target_mm: int = 1.0          # 位置容差 (mm)
     
-    dir_sign: int = -1               # +1 no inversion; -1 invert direction
-    step_mm: float = 10              # Step per key press (mm)
+    dir_sign: int = -1               # +1 无反转；-1 反转方向
+    step_mm: float = 10              # 每次按键的步进 (mm)
 
 
 
 class LiftAxis:
-    """Z-axis controller merged into existing left/right bus (velocity mode + multi-turn counter + mm-level closed loop)"""
+    """Z 轴控制器，集成到现有的左/右总线（速度模式 + 多转计数器 + mm 级闭环）"""
     def __init__(
         self,
         cfg: LiftAxisConfig,
@@ -57,13 +57,13 @@ class LiftAxis:
         self._deg_per_tick = 360.0 / self._ticks_per_rev
         self._mm_per_deg = (cfg.lead_mm_per_rev * cfg.output_gear_ratio) / 360.0
 
-        # Multi-turn tick tracking
+        # 多转刻度跟踪
         self._last_tick: float = 0.0
         self._extended_ticks: float = 0.0  # 连续累计
-        # Zero reference (extended angle)
+        # 零参考（扩展角度）
         self._z0_deg: float = 0.0
 
-        # Target (non-blocking)
+        # 目标（非阻塞）
         self._target_mm: float = 0.0
 
         self._configured = False
@@ -101,7 +101,7 @@ class LiftAxis:
         #print(f"[lift_axis.get_height_mm] raw_mm={raw_mm:.2f}, extended_deg={self._extended_deg():.2f}, z0_deg={self._z0_deg:.2f}")  # debug
         return raw_mm
     
-    # Homing (down to hard stop → rebound, set z=0mm)
+    # 归零（向下到硬限位 → 回退，设置 z=0mm）
     def home(self, use_current: bool = True) -> None:
         if not self.enabled: return
         self.configure()
@@ -111,7 +111,7 @@ class LiftAxis:
         self._bus.write("Goal_Velocity", name, v_down)
         stuck = 0
         last_tick = int(self._bus.read("Present_Position", name, normalize=False))
-        for _ in range(600):  # ~30s @50ms
+        for _ in range(600):  # ~30秒 @50ms
             time.sleep(0.05)
             self._update_extended_ticks()
             now_tick = self._last_tick
@@ -156,28 +156,28 @@ class LiftAxis:
         self._bus.write("Goal_Velocity", self.cfg.name, 0.0)
 
     def update(self) -> None:
-        """Call every frame (recommended 50–100 Hz)"""
+        """每帧调用（建议 50–100 Hz）"""
         if not self.enabled or self._target_mm is None: return
         cur_mm = self.get_height_mm()
         err = self._target_mm - cur_mm
-        # Position reached?
+        # 到达位置？
         if abs(err) <= self.cfg.on_target_mm:
             self._bus.write("Goal_Velocity", self.cfg.name, 0)
             self._target_mm = None
             return
-        # Simple P-controller
+        # 简单的 P 控制器
         v = self.cfg.kp_vel * err
         v = max(-self.cfg.v_max, min(self.cfg.v_max, v))
         self._bus.write("Goal_Velocity", self.cfg.name, int(self.cfg.dir_sign * v))
 
-        # Read current for debug only
+        # 仅用于调试读取电流
         raw_cur_ma = int(self._bus.read("Present_Current", self.cfg.name, normalize=False))
         cur_ma = raw_cur_ma * 6.5
         print(f"[lift_axis.update] target={self._target_mm:.2f} mm, cur={cur_mm:.2f} mm, err={err:.2f} mm, v={v:.1f}| current={cur_ma} mA")
 
-    # Lightweight coupling with action/obs
+    # 与动作/观察的轻量级耦合
     def contribute_observation(self, obs: Dict[str, float]) -> None:
-        """Export convenient observation fields: height_mm and velocity"""
+        """导出便捷的观察字段：height_mm 和 velocity"""
         if not self.enabled: return
         obs[f"{self.cfg.name}.height_mm"] = self.get_height_mm()
         try:
@@ -187,9 +187,9 @@ class LiftAxis:
 
     def apply_action(self, action: Dict[str, float]) -> None:
         """
-        Supports two action keys:
-        - f"{name}.height_mm": target height (mm)  (recommended)
-        - f"{name}.vel"      : target velocity     (advanced)
+        支持两个动作键：
+        - f"{name}.height_mm": 目标高度 (mm)  (推荐)
+        - f"{name}.vel"      : 目标速度     (高级)
         """
         #print(f"[lift_axis.apply_action] action={action}")  # debug
         if not self.enabled: return
@@ -198,11 +198,11 @@ class LiftAxis:
         if key_h in action:
             self.set_height_target_mm(float(action[key_h]))
         if key_v in action:
-            # Direct velocity clears height target
+            # 直接速度清除高度目标
             self._target_mm = None
             v = int(action[key_v])
             v = max(-self.cfg.v_max, min(self.cfg.v_max, v))
-            # Limit if already at boundary
+            # 如果已在边界则限制
             try:
                 cur_mm = self.get_height_mm()
                 if (cur_mm >= self.cfg.soft_max_mm and v > 0) or (cur_mm <= self.cfg.soft_min_mm and v < 0):

@@ -22,7 +22,7 @@ NUM_MOTORS = 35
 
 
 class G1_29_JointArmIndex(IntEnum):
-    # Left arm
+    # 左臂
     kLeftShoulderPitch = 15
     kLeftShoulderRoll = 16
     kLeftShoulderYaw = 17
@@ -31,7 +31,7 @@ class G1_29_JointArmIndex(IntEnum):
     kLeftWristPitch = 20
     kLeftWristyaw = 21
 
-    # Right arm
+    # 右臂
     kRightShoulderPitch = 22
     kRightShoulderRoll = 23
     kRightShoulderYaw = 24
@@ -42,7 +42,7 @@ class G1_29_JointArmIndex(IntEnum):
 
 
 class G1_29_JointIndex(IntEnum):
-    # Left leg
+    # 左腿
     kLeftHipPitch = 0
     kLeftHipRoll = 1
     kLeftHipYaw = 2
@@ -50,7 +50,7 @@ class G1_29_JointIndex(IntEnum):
     kLeftAnklePitch = 4
     kLeftAnkleRoll = 5
 
-    # Right leg
+    # 右腿
     kRightHipPitch = 6
     kRightHipRoll = 7
     kRightHipYaw = 8
@@ -62,7 +62,7 @@ class G1_29_JointIndex(IntEnum):
     kWaistRoll = 13
     kWaistPitch = 14
 
-    # Left arm
+    # 左臂
     kLeftShoulderPitch = 15
     kLeftShoulderRoll = 16
     kLeftShoulderYaw = 17
@@ -71,7 +71,7 @@ class G1_29_JointIndex(IntEnum):
     kLeftWristPitch = 20
     kLeftWristyaw = 21
 
-    # Right arm
+    # 右臂
     kRightShoulderPitch = 22
     kRightShoulderRoll = 23
     kRightShoulderYaw = 24
@@ -80,7 +80,7 @@ class G1_29_JointIndex(IntEnum):
     kRightWristPitch = 27
     kRightWristYaw = 28
 
-    # not used
+    # 未使用
     kNotUsedJoint0 = 29
     kNotUsedJoint1 = 30
     kNotUsedJoint2 = 31
