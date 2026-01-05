@@ -1,4 +1,4 @@
-![Sign](media\lova_sign.png)
+![Sign](media/lova_sign.png)
 
 # Lova
 
